@@ -9,6 +9,7 @@ export const StyledLabel = styled(Label)`
     color: darkgray;
     font-weight: bold;
     cursor: pointer;
+    margin-right: 10px;
 
     &.error {
         color: red;

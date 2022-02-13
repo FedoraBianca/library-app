@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { isPropertySignature } from 'typescript';
 import InlineErrorList from '../InlineErrorList';
 import { InputWrapper, StyledInput, StyledLabel } from './CustomInput.style';
 
