@@ -35,7 +35,7 @@ export const deleteUserStart = (payload: IDeleteUserStartPayload) => ({
 });
 
 export const deleteUserSuccess = () => ({
-    type: UsersActionsTypes.DELETE_USER_START
+    type: UsersActionsTypes.DELETE_USER_SUCCESS
 });
 
 export const deleteUserFail = (payload: IFailPayload) => ({

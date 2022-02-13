@@ -1,63 +1,100 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Card, CardBody, Table } from "reactstrap";
+import { useHistory } from "react-router-dom";
+import { Card, CardBody, Modal, ModalBody, ModalFooter, ModalHeader, Table } from "reactstrap";
 import CustomButton from "../components/CustomButton";
 import { IState } from "../interfaces/state";
 import { IUser } from "../interfaces/user";
-import { getUserListStart } from "../redux/actions/usersActions";
+import { deleteUserStart, getUserListStart } from "../redux/actions/usersActions";
+import { PrivateRouteList } from "../routes/routes";
 
 const DashboardPage = () => {
     const dispatch = useDispatch();
     const { list, loading, error } = useSelector((state: IState) => state.users);
     const headerData = ['Id', 'Name', 'Username', 'City', 'Email', 'Edit', 'Delete'];
-
+    let history = useHistory();
+    const [showModal, setShowModal] = useState(false);
+    const [deleteId, setDeleteId] = useState(0);
+    
     useEffect(() => {
         dispatch(getUserListStart());
     }, []);
 
     const handleAdd = () => {
-        console.log('add');
+        history.push(PrivateRouteList.CREATE_USER);
     };
 
     const handleEdit = (id: number) => {
-        console.log('edit', id);
+        history.push(PrivateRouteList.UPDATE_USER.replace(':id', String(id)));
     };
 
     const handleDelete = (id: number) => {
-        console.log('delete', id);
+        setShowModal(false);
+        dispatch(deleteUserStart({ id }));
+    };
+
+    const confirmDelete = (id: number) => {
+        setDeleteId(id);
+        setShowModal(true);
+    };
+
+    const toggleModal = () => {
+        setShowModal(!showModal);
     };
 
     return (
-        <Card>
-            <CardBody>
-            <Table className='responsive'>
-                <thead>
-                    <tr>
+        <>
+            <Card>
+                <CardBody>
+                <div className="w-100 d-flex flex-row justify-content-between">
+                    <h2>User list</h2>
+                    <CustomButton variant='primary' onClick={handleAdd}>Add new</CustomButton>
+                </div>
+                <Table className='responsive'>
+                    <thead>
+                        <tr>
+                            {
+                                headerData.map((header: string) => <th key={header}>{header}</th>)
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
                         {
-                            headerData.map((header: string) => <th key={header}>{header}</th>)
+                            list.map((user: IUser, rowIndex: number) => <tr key={user.id}>
+                                <td>{user.id}</td>
+                                <td>{user.name}</td>
+                                <td>{user.username ? user.username : 'N/A'}</td>
+                                <td>{user.address ? user.address.city : 'N/A'}</td>
+                                <td>{user.email}</td>
+                                <td>
+                                    <CustomButton variant='warning' onClick={() => handleEdit(user.id)}>Edit</CustomButton>
+                                </td>
+                                <td>
+                                    <CustomButton variant='danger' onClick={() => confirmDelete(user.id)}>Delete</CustomButton>
+                                </td>
+                            </tr>)
                         }
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        list.map((user: IUser, rowIndex: number) => <tr key={user.id}>
-                            <td>{user.id}</td>
-                            <td>{user.name}</td>
-                            <td>{user.username ? user.username : 'N/A'}</td>
-                            <td>{user.address ? user.address.city : 'N/A'}</td>
-                            <td>{user.email}</td>
-                            <td>
-                                <CustomButton variant='warning' onClick={() => handleEdit(user.id)}>Edit</CustomButton>
-                            </td>
-                            <td>
-                                <CustomButton variant='danger' onClick={() => handleDelete(user.id)}>Delete</CustomButton>
-                            </td>
-                        </tr>)
-                    }
-                </tbody>
-            </Table>
-            </CardBody>
-        </Card>
+                    </tbody>
+                </Table>
+                </CardBody>
+            </Card>
+
+            <Modal isOpen={showModal} toggle={toggleModal}>
+                <ModalHeader toggle={toggleModal}>Delete</ModalHeader>
+                    <ModalBody>
+                        Are you sure you want to delete the user ?
+                    </ModalBody>
+                    <ModalFooter>
+                    <CustomButton onClick={toggleModal} variant='secondary' className="me-2">
+                        Cancle
+                    </CustomButton>
+                    <CustomButton onClick={() => handleDelete(deleteId)} variant='danger'>
+                        Delete
+                     </CustomButton>
+                </ModalFooter>
+            </Modal>
+        </>
+
     );
 };
 
