@@ -1,12 +1,14 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { Card, CardBody } from "reactstrap";
 import CustomButton from "../components/CustomButton";
 import CustomInput from "../components/CustomInput";
 import useForm from "../hooks/useForm";
 import { FormDomains, IFormInputState } from "../interfaces/form";
 import { IState } from "../interfaces/state";
-import { getUserStart } from "../redux/actions/usersActions";
+import { createUserStart, getUserStart, updateUserStart } from "../redux/actions/usersActions";
+import { PrivateRouteList } from "../routes/routes";
 
 interface IUserFormStateFields {
     name: IFormInputState;
@@ -21,6 +23,7 @@ interface IUserFormStateErrors {
 const UserPage = () => {
     const particle = window.location.pathname.split('/').pop();
     const id = Number(particle);
+    let history = useHistory();
     const dispatch = useDispatch();
     const { currentUser, loading, error } = useSelector((state: IState) => state.users);
     const initialDataState: IUserFormStateFields = {
@@ -38,14 +41,36 @@ const UserPage = () => {
         if (id) {
             dispatch(getUserStart({ id }));
         }
-    })
+    }, [id])
+
+    useEffect(() => {
+        if (currentUser) {
+            const updateData = { name: { value: currentUser.name }, email: { value: currentUser.email }};
+            setData({
+                ...data,
+                ...updateData
+            });
+        }
+    }, [currentUser]);
 
     const handleCancel = () => {
-        console.log('cancel');
+        history.push(PrivateRouteList.DASHBOARD);
     };
 
     const handleSubmit = () => {
-        console.log('submit');
+        if (isValidForm()) {
+            const newData = { name: String(data.name.value), email: String(data.email.value)};
+
+            if (id) {
+                dispatch(updateUserStart({ user: { ...newData, id }}));
+            }
+            else {
+                const udateData = { name: String(data.name.value), email: String(data.email.value)};
+                dispatch(createUserStart({ user: newData}));
+            }
+
+            history.push(PrivateRouteList.DASHBOARD);
+        }
     };
 
     return (

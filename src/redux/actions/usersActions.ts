@@ -15,7 +15,7 @@ export const getUserListFail = (payload: IFailPayload) => ({
 });
 
 export const getUserStart = (payload: IGetUserStartPayload) => ({
-    type: UsersActionsTypes.GET_USER_LIST_START,
+    type: UsersActionsTypes.GET_USER_START,
     payload
 });
 

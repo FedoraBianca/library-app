@@ -272,19 +272,11 @@ export const ApiCall = (requestParams: IApiCallParams) => {
                 }
             }
         case 'post':
-            if (mockUserList.find((user: IUser) => String(user.id) === lastParticle)) {
-                return {
-                    success: false,
-                    error: 'User already exists!'
-                }
-            } 
-            else {
-                return {
-                    data: mockUserList.push(data.user),
-                    success: true,
-                    error
-                }
-            }
+          return {
+            data: mockUserList.push({ ...data.user, id: new Date().valueOf() }),
+            success: true,
+            error
+          }
         case 'put':
             const found = mockUserList.find((user: IUser) => String(user.id) === lastParticle);
                 if (!found) {

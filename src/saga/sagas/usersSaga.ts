@@ -37,7 +37,7 @@ export function* getUser(action: IGetUserStartAction) {
 export function* createUser(action: ICreateUserStartAction) {
     const { user } = action.payload;
     const requestParams = {
-        route: `https://my-json-server.typicode.com/karolkproexe/jsonplaceholderdb/data/${user.id}`,
+        route: `https://my-json-server.typicode.com/karolkproexe/jsonplaceholderdb/data`,
         type: 'post',
         data: user
     };

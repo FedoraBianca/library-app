@@ -1,4 +1,4 @@
-import { IUser } from "../../interfaces/user";
+import { IUser, IUserRequest } from "../../interfaces/user";
 
 export enum UsersActionsTypes {
     GET_USER_LIST_START = 'GET_USER_LIST_START',
@@ -82,7 +82,7 @@ export interface IDeleteUserFailAction {
 }
 
 export interface ICreateUserStartPayload {
-    user: IUser;
+    user: IUserRequest;
 }
 
 export interface ICreateUserStartAction {
