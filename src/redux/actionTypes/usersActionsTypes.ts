@@ -54,7 +54,7 @@ export interface IGetUserSuccessPayload {
 }
 
 export interface IGetUserSucessAction {
-    type: UsersActionsTypes.GET_USER_LIST_SUCCESS;
+    type: UsersActionsTypes.GET_USER_SUCCESS;
     payload: IGetUserSuccessPayload;
 }
 
@@ -100,7 +100,7 @@ export interface ICreateUserFailAction {
 }
 
 export interface IUpdateUserStartPayload {
-    id: number;
+    user: IUser;
 }
 
 export interface IUpdateUserStartAction {
@@ -113,7 +113,7 @@ export interface IUpdateUserSuccessAction {
 }
 
 export interface IUpdateUserFailAction {
-    tyoe: UsersActionsTypes.UPDATE_USER_FAIL;
+    type: UsersActionsTypes.UPDATE_USER_FAIL;
     payload: IFailPayload;
 }
 

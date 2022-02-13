@@ -1,14 +1,32 @@
 import React from 'react';
-import CustomTable from './components/CustomTable';
-import UserForm from './components/UserForm';
+import { Provider } from 'react-redux';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import DashboardPage from './pages/DashboardPage';
+import UserPage from './pages/UserPage';
+import store from './redux/store';
+import { PrivateRouteList } from './routes/routes';
 
 function App() {
   return (
-    <div className='App'>
-      <h1>Dashboard</h1>
-      <CustomTable />
-      <UserForm />
-    </div>
+    <BrowserRouter>
+    <Provider store={store}>
+    <Switch>
+      <Route
+        exact
+        path={PrivateRouteList.DASHBOARD}
+        component={DashboardPage}
+      />
+      <Route
+        exact
+        path={[
+          PrivateRouteList.CREATE_USER,
+          PrivateRouteList.UPDATE_USER
+        ]}
+        component={UserPage}
+      />
+    </Switch>
+    </Provider>
+    </BrowserRouter>
   );
 }
 

@@ -8,4 +8,5 @@ export interface IUsers {
     list: IUser[];
     loading: boolean;
     error?: string;
+    currentUser?: IUser;
 }
