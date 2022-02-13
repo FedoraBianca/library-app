@@ -47,35 +47,40 @@ const DashboardPage = () => {
             <Card>
                 <CardBody>
                 <div className="w-100 d-flex flex-row justify-content-between">
-                    <h2>User list</h2>
+                    <p>User list</p>
                     <CustomButton variant='primary' onClick={handleAdd}>Add new</CustomButton>
                 </div>
-                <Table className='responsive'>
-                    <thead>
-                        <tr>
+                {
+                    list.length === 0 && <p>There is no user yet!</p>
+                }
+                { list.length > 0 &&
+                    <Table className='responsive'>
+                        <thead>
+                            <tr>
+                                {
+                                    headerData.map((header: string) => <th key={header}>{header}</th>)
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
                             {
-                                headerData.map((header: string) => <th key={header}>{header}</th>)
+                                list.map((user: IUser, rowIndex: number) => <tr key={user.id}>
+                                    <td>{user.id}</td>
+                                    <td>{user.name}</td>
+                                    <td>{user.username ? user.username : 'N/A'}</td>
+                                    <td>{user.address ? user.address.city : 'N/A'}</td>
+                                    <td>{user.email}</td>
+                                    <td>
+                                        <CustomButton variant='warning' onClick={() => handleEdit(user.id)}>Edit</CustomButton>
+                                    </td>
+                                    <td>
+                                        <CustomButton variant='danger' onClick={() => confirmDelete(user.id)}>Delete</CustomButton>
+                                    </td>
+                                </tr>)
                             }
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            list.map((user: IUser, rowIndex: number) => <tr key={user.id}>
-                                <td>{user.id}</td>
-                                <td>{user.name}</td>
-                                <td>{user.username ? user.username : 'N/A'}</td>
-                                <td>{user.address ? user.address.city : 'N/A'}</td>
-                                <td>{user.email}</td>
-                                <td>
-                                    <CustomButton variant='warning' onClick={() => handleEdit(user.id)}>Edit</CustomButton>
-                                </td>
-                                <td>
-                                    <CustomButton variant='danger' onClick={() => confirmDelete(user.id)}>Delete</CustomButton>
-                                </td>
-                            </tr>)
-                        }
-                    </tbody>
-                </Table>
+                        </tbody>
+                    </Table>
+                }
                 </CardBody>
             </Card>
 
