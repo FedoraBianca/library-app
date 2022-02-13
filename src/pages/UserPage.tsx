@@ -1,5 +1,4 @@
 import React from "react";
-import { RouteProps } from "react-router-dom";
 
 const UserPage = () => {
     return (

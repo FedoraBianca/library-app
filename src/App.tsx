@@ -10,6 +10,7 @@ function App() {
   return (
     <BrowserRouter>
     <Provider store={store}>
+    <h1>Dashboard</h1>
     <Switch>
       <Route
         exact

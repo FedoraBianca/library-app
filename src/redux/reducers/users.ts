@@ -22,6 +22,7 @@ const users = (state = initialState.users, action: UsersActions) => {
         case UsersActionsTypes.GET_USER_LIST_SUCCESS:
             return {
                 ...state,
+                list: action.payload.list,
                 loading: false,
                 error: undefined,
                 currentUser: undefined

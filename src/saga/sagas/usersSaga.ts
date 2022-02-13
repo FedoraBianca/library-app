@@ -1,10 +1,10 @@
 import { all, put, takeLatest } from "redux-saga/effects";
 import { IUser } from "../../interfaces/user";
 import { createUserFail, createUserSuccess, deleteUserFail, deleteUserSuccess, getUserFail, getUserListFail, getUserListStart, getUserListSuccess, getUserSuccess, updateUserFail, updateUserSuccess } from "../../redux/actions/usersActions";
-import { ICreateUserStartAction, IDeleteUserStartAction, IGetUserListStartAction, IGetUserStartAction, IUpdateUserStartAction, UsersActionsTypes } from "../../redux/actionTypes/usersActionsTypes";
+import { ICreateUserStartAction, IDeleteUserStartAction, IGetUserStartAction, IUpdateUserStartAction, UsersActionsTypes } from "../../redux/actionTypes/usersActionsTypes";
 import { ApiCall, IApiCallParams } from "../api";
 
-export function* getUserList(action: IGetUserListStartAction) {
+export function* getUserList() {
     const requestParams = {
         route: 'https://my-json-server.typicode.com/karolkproexe/jsonplaceholderdb/data',
         type: 'get'
@@ -87,7 +87,7 @@ export function* updateUser(action: IUpdateUserStartAction) {
 export function* usersSaga() {
     yield all([
         takeLatest(UsersActionsTypes.GET_USER_LIST_START, getUserList),
-        takeLatest(UsersActionsTypes.GET_USER_LIST_START, getUser),
+        takeLatest(UsersActionsTypes.GET_USER_START, getUser),
         takeLatest(UsersActionsTypes.CREATE_USER_START, createUser),
         takeLatest(UsersActionsTypes.DELETE_USER_START, deleteUser),
         takeLatest(UsersActionsTypes.UPDATE_USER_START, updateUser),
