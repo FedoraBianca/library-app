@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { Card, CardBody } from "reactstrap";
+import { Alert, Card, CardBody } from "reactstrap";
 import CustomButton from "../components/CustomButton";
 import CustomInput from "../components/CustomInput";
 import useForm from "../hooks/useForm";
@@ -41,7 +41,7 @@ const UserPage = () => {
         if (id) {
             dispatch(getUserStart({ id }));
         }
-    }, [id])
+    }, [id, dispatch])
 
     useEffect(() => {
         if (currentUser) {
@@ -51,6 +51,7 @@ const UserPage = () => {
                 ...updateData
             });
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentUser]);
 
     const handleCancel = () => {
@@ -65,7 +66,6 @@ const UserPage = () => {
                 dispatch(updateUserStart({ user: { ...newData, id }}));
             }
             else {
-                const udateData = { name: String(data.name.value), email: String(data.email.value)};
                 dispatch(createUserStart({ user: newData}));
             }
 
@@ -76,46 +76,54 @@ const UserPage = () => {
     return (
         <Card>
             <CardBody>
-                <div>
-                    <CustomInput
-                        type='text'
-                        id='name'
-                        fieldName='name'
-                        value={data.name.value}
-                        errors={errors.name}
-                        placeholder='Type name here'
-                        label='Name'
-                        onBlur={handleInput}
-                        onChange={handleInput}
-                        className='mb-2'
-                    />
-                    <CustomInput
-                        type='email'
-                        id='email'
-                        fieldName='email'
-                        value={data.email.value}
-                        errors={errors.email}
-                        placeholder='Type email here'
-                        label='Email'
-                        onBlur={handleInput}
-                        onChange={handleInput}
-                    />
-                </div>
-                <div className='d-flex w-100 justify-content-end mt-2'>
-                    <CustomButton
-                        onClick={handleCancel}
-                        variant='light'
-                    >
-                        Cancle
-                    </CustomButton>
-                    <CustomButton
-                        onClick={handleSubmit}
-                        variant='success'
-                        className='ms-2'
-                    >
-                        Submit
-                    </CustomButton>
-                </div>
+                {
+                    error && <Alert>{error}</Alert>
+                }
+                                {
+                    loading && <p>Loading...</p>
+                }
+                { !error && !loading && <div className='w-100'>
+                    <div>
+                        <CustomInput
+                            type='text'
+                            id='name'
+                            fieldName='name'
+                            value={data.name.value}
+                            errors={errors.name}
+                            placeholder='Type name here'
+                            label='Name'
+                            onBlur={handleInput}
+                            onChange={handleInput}
+                            className='mb-2'
+                        />
+                        <CustomInput
+                            type='email'
+                            id='email'
+                            fieldName='email'
+                            value={data.email.value}
+                            errors={errors.email}
+                            placeholder='Type email here'
+                            label='Email'
+                            onBlur={handleInput}
+                            onChange={handleInput}
+                        />
+                    </div>
+                    <div className='d-flex w-100 justify-content-end mt-2'>
+                        <CustomButton
+                            onClick={handleCancel}
+                            variant='light'
+                        >
+                            Cancle
+                        </CustomButton>
+                        <CustomButton
+                            onClick={handleSubmit}
+                            variant='success'
+                            className='ms-2'
+                        >
+                            Submit
+                        </CustomButton>
+                    </div>
+                </div> }
             </CardBody>
         </Card>
     );

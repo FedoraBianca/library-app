@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import InlineErrorList from '../InlineErrorList';
 import { InputWrapper, StyledInput, StyledLabel } from './CustomInput.style';
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { Card, CardBody, Modal, ModalBody, ModalFooter, ModalHeader, Table } from "reactstrap";
+import { Alert, Card, CardBody, Modal, ModalBody, ModalFooter, ModalHeader, Table } from "reactstrap";
 import CustomButton from "../components/CustomButton";
 import { IState } from "../interfaces/state";
 import { IUser } from "../interfaces/user";
@@ -18,7 +18,7 @@ const DashboardPage = () => {
     
     useEffect(() => {
         dispatch(getUserListStart());
-    }, []);
+    }, [dispatch]);
 
     const handleAdd = () => {
         history.push(PrivateRouteList.CREATE_USER);
@@ -53,7 +53,13 @@ const DashboardPage = () => {
                 {
                     list.length === 0 && <p>There is no user yet!</p>
                 }
-                { list.length > 0 &&
+                {
+                    error && <Alert>{error}</Alert>
+                }
+                                {
+                    loading && <p>Loading...</p>
+                }
+                { list.length > 0 && !loading && !error &&
                     <Table className='responsive'>
                         <thead>
                             <tr>
