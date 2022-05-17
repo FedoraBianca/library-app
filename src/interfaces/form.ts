@@ -12,7 +12,7 @@ export interface IFormInputState extends IWithFieldHelpers {
 }
 
 export enum FormDomains {
-    USER_FORM = 'user-form'
+    BOOK_FORM = 'book-form'
 }
 
 export interface IGenericFormHelper {

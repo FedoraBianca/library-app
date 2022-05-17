@@ -1,5 +1,5 @@
 export enum PrivateRouteList {
     DASHBOARD = '/',
-    CREATE_USER = '/user',
-    UPDATE_USER = '/user/:id'
+    ADD_BOOK = '/add-book',
+    BORROWED_BOOKS = '/borrowed-books'
 }

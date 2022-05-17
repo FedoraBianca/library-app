@@ -1,9 +1,11 @@
 import { AnyAction, CombinedState, combineReducers } from "redux";
 import { IState } from "../../interfaces/state";
-import users from "./users";
+import books from "./books";
+import page from "./page";
 
 const appReducer = combineReducers<IState>({
-    users
+    page,
+    books
 });
 
 const rootReducer = (state: CombinedState<IState> | undefined, action: AnyAction) => {

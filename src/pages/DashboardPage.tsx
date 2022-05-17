@@ -1,112 +1,93 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { Alert, Card, CardBody, Modal, ModalBody, ModalFooter, ModalHeader, Table } from "reactstrap";
+import { Alert } from "reactstrap";
 import CustomButton from "../components/CustomButton";
+import FlashMessage from "../components/FlashMessage";
+import { IBook } from "../interfaces/book";
+import { AppModals } from "../interfaces/page";
 import { IState } from "../interfaces/state";
-import { IUser } from "../interfaces/user";
-import { deleteUserStart, getUserListStart } from "../redux/actions/usersActions";
+import { getBookListStart } from "../redux/actions/bookActions";
+import { clearPageFlashMessage, toggleModal } from "../redux/actions/pageActions";
 import { PrivateRouteList } from "../routes/routes";
+import CustomTable from "../components/CustomTable";
+import ActionEnhancer from "../components/TableEnhancers/ActionEnhancer";
 
 const DashboardPage = () => {
-    const dispatch = useDispatch();
-    const { list, loading, error } = useSelector((state: IState) => state.users);
-    const headerData = ['Id', 'Name', 'Username', 'City', 'Email', 'Edit', 'Delete'];
-    let history = useHistory();
-    const [showModal, setShowModal] = useState(false);
-    const [deleteId, setDeleteId] = useState(0);
-    
-    useEffect(() => {
-        dispatch(getUserListStart());
-    }, [dispatch]);
+  const dispatch = useDispatch();
+  const { list, loading, error } = useSelector((state: IState) => state.books);
+  const flashMessage = useSelector((state: IState) => state.page.flashMessage);
+  const headerData = ['ISBN', 'Title', 'Borrow Price', 'Availability', 'Total Items'];
+  const [tableData, setTableData] = useState<Record<string, any>[]>();
+  let history = useHistory();
 
-    const handleAdd = () => {
-        history.push(PrivateRouteList.CREATE_USER);
-    };
+  useEffect(() => {
+    dispatch(getBookListStart());
+  }, []);
 
-    const handleEdit = (id: number) => {
-        history.push(PrivateRouteList.UPDATE_USER.replace(':id', String(id)));
-    };
+  useEffect(() => {
+    const data = list.map((item: Record<string, any>) => {
+      let formattedItem = {
+        ...item,
+        totalItems: `${item.totalItems} items`,
+        availableItems: item.availableItems ? `${item.availableItems} items` : 'No book available',
+        borrowPrice: `${item.borrowPrice} $`,
+        action: item.availableItems ? { enhancer: <ActionEnhancer item={item} action={handleBorrow} actionName='Borrow' /> } : null
+      }
 
-    const handleDelete = (id: number) => {
-        setShowModal(false);
-        dispatch(deleteUserStart({ id }));
-    };
+      return formattedItem;
+    })
 
-    const confirmDelete = (id: number) => {
-        setDeleteId(id);
-        setShowModal(true);
-    };
+    setTableData(data);
+  }, [list]);
 
-    const toggleModal = () => {
-        setShowModal(!showModal);
-    };
+  const handleAdd = () => {
+    history.push(PrivateRouteList.ADD_BOOK);
+  };
 
-    return (
-        <>
-            <Card>
-                <CardBody>
-                <div className="w-100 d-flex flex-row justify-content-between">
-                    <p>User list</p>
-                    <CustomButton variant='primary' onClick={handleAdd}>Add new</CustomButton>
-                </div>
-                {
-                    list.length === 0 && <p>There is no user yet!</p>
-                }
-                {
-                    error && <Alert>{error}</Alert>
-                }
-                                {
-                    loading && <p>Loading...</p>
-                }
-                { list.length > 0 && !loading && !error &&
-                    <Table className='responsive'>
-                        <thead>
-                            <tr>
-                                {
-                                    headerData.map((header: string) => <th key={header}>{header}</th>)
-                                }
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                list.map((user: IUser, rowIndex: number) => <tr key={user.id}>
-                                    <td>{user.id}</td>
-                                    <td>{user.name}</td>
-                                    <td>{user.username ? user.username : 'N/A'}</td>
-                                    <td>{user.address ? user.address.city : 'N/A'}</td>
-                                    <td>{user.email}</td>
-                                    <td>
-                                        <CustomButton variant='warning' onClick={() => handleEdit(user.id)}>Edit</CustomButton>
-                                    </td>
-                                    <td>
-                                        <CustomButton variant='danger' onClick={() => confirmDelete(user.id)}>Delete</CustomButton>
-                                    </td>
-                                </tr>)
-                            }
-                        </tbody>
-                    </Table>
-                }
-                </CardBody>
-            </Card>
+  const handleBorrowedBooks = () => {
+    history.push(PrivateRouteList.BORROWED_BOOKS);
+  }
 
-            <Modal isOpen={showModal} toggle={toggleModal}>
-                <ModalHeader toggle={toggleModal}>Delete</ModalHeader>
-                    <ModalBody>
-                        Are you sure you want to delete the user ?
-                    </ModalBody>
-                    <ModalFooter>
-                    <CustomButton onClick={toggleModal} variant='secondary' className="me-2">
-                        Cancle
-                    </CustomButton>
-                    <CustomButton onClick={() => handleDelete(deleteId)} variant='danger'>
-                        Delete
-                     </CustomButton>
-                </ModalFooter>
-            </Modal>
-        </>
+  const handleBorrow = (book: IBook) => {
+    dispatch(toggleModal({ active: AppModals.BORROW_MODAL, input: { book } }));
+  };
 
-    );
+  const handleClearFlashMessage = () => {
+    dispatch(clearPageFlashMessage());
+  };
+
+  return (
+    <>
+      {!loading && flashMessage && (
+        <FlashMessage
+          color={flashMessage.type}
+          onClose={handleClearFlashMessage}
+          className='mt-3'
+          autoFadeMilliseconds={3000}
+        >
+          {flashMessage.message}
+        </FlashMessage>
+      )}
+      <div className="w-100 d-flex flex-row justify-content-between mb-5">
+        <h5>Check out our book collection:</h5>
+        <div>
+          <CustomButton onClick={handleBorrowedBooks} variant='success' className='me-3'>View borrowed books</CustomButton>
+          <CustomButton onClick={handleAdd}>Add new book</CustomButton>
+        </div>
+      </div>
+      {
+        error && <Alert>{error}</Alert>
+      }
+      {
+        loading && <p>Loading...</p>
+      }
+      {!loading && !error && tableData &&
+        <CustomTable tableData={tableData} tableHeader={headerData} action={() => handleBorrow} />
+      }
+    </>
+  );
 };
 
 export default DashboardPage;

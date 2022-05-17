@@ -1,8 +1,12 @@
 import { IState } from "../interfaces/state";
 
 const initialState: IState = {
-    users: {
+    page: {
+        modal: { active: null }
+    },
+    books: {
         list: [],
+        activeOrders: [],
         loading: false
     }
 };

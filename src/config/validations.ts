@@ -1,6 +1,6 @@
 import { IValidationConfig } from "../interfaces/validations";
-import userFormRules from "./validation-rules/userFormRules";
+import bookFormRules from "./validation-rules/bookFormRules";
 
 export const validationConfig: IValidationConfig = {
-    ...userFormRules
+    ...bookFormRules
 };
