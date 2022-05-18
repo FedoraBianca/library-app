@@ -122,7 +122,7 @@ export const ApiCall = (requestParams: IApiCallParams) => {
         }
         else {
           mockBookList = mockBookList.map(book =>
-            book.ISBN === data
+            book.ISBN === data.ISBN
               ? { ...book, availableItems: book.availableItems ? book.availableItems - 1 : 0 }
               : book
             );
