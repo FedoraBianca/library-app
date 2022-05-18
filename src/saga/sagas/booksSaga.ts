@@ -75,7 +75,7 @@ export function* borrowBook(action: IBorrowBookStartAction) {
 
 export function* getActiveOrders() {
     const requestParams = {
-        route: 'some-route-here/book-orders',
+        route: 'some-route-here/borrowed-books',
         type: 'get'
     };
     const response = ApiCall(requestParams as IApiCallParams);

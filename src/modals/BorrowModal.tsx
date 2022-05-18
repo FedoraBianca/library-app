@@ -13,7 +13,7 @@ const BorrowModal = (props: IModalProps) => {
     const dispatch = useDispatch();
     let history = useHistory();
     const { book } = props.input as IBorrowModalInput;
-    const returnDate = moment().add(2, 'weeks').format('MMMM Do YYYY');
+    const returnDate = moment.utc().add(2, 'weeks').format('MMMM Do YYYY');
     const penalty = (book.borrowPrice / 100);
 
     const handleBorrow = () => {

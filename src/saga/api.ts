@@ -49,15 +49,17 @@ let mockBookList: IBook[] = [
 let mockActiveOrders: IOrder[] = [
   {
     id: generateId(10),
-    dateCreated: '12-02-2022',
+    dateCreated: '2022-05-08T11:45:24Z',
     ISBN: '978-606-913-439-9',
     bookTitle: 'Principles',
+    borrowPrice: 60,
   },
   {
     id: generateId(10),
-    dateCreated: '20-03-2022',
+    dateCreated: '2022-04-10T10:05:24Z',
     ISBN: '9780735213616',
-    bookTitle: 'Breath'
+    bookTitle: 'Breath',
+    borrowPrice: 40
   }
 ];
 
@@ -106,10 +108,11 @@ export const ApiCall = (requestParams: IApiCallParams) => {
             id: generateId(10),
             ISBN: data.ISBN,
             bookTitle: data.title,
-            dateCreated: moment().format('MM-DD-YYYY')
+            dateCreated: moment.utc().format(),
+            borrowPrice: data.borrowPrice
           });
 
-        found = mockBookList.find((book: IBook) => book.ISBN === data);
+        found = mockBookList.find((book: IBook) => book.ISBN === data.ISBN);
 
         if (!found || found.availableItems === 0 ) {
           return {

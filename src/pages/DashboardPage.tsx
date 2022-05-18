@@ -34,7 +34,7 @@ const DashboardPage = () => {
         availableItems: item.availableItems ? `${item.availableItems} items` : 'No book available',
         borrowPrice: `${item.borrowPrice} $`,
         action: item.availableItems ? { enhancer: <ActionEnhancer item={item} action={handleBorrow} actionName='Borrow' /> } : null
-      }
+      };
 
       return formattedItem;
     })
