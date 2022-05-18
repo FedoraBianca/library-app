@@ -34,9 +34,15 @@ const BorrowModal = (props: IModalProps) => {
             defaultFooter={false}
             size='lg'
             footerComponent={
-                <CustomButton variant='secondary' onClick={handleBorrow}>
+              <div className='w-100 px-5 d-flex justify-content-between'>
+                <CustomButton variant='danger' onClick={handleCloseModal}>
+                    Cancel
+                </CustomButton>
+
+                <CustomButton variant='success' onClick={handleBorrow}>
                     Borrow
                 </CustomButton>
+              </div>
             }
         >
             <div className='text-center'>
