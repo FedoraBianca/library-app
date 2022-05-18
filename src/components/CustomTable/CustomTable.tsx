@@ -4,7 +4,6 @@ import { Card, CardBody, Table } from 'reactstrap';
 export interface ICustomTableProps {
   tableData: Record<string, any>[];
   tableHeader: string[];
-  action: (item: Record<string, any>) => void;
 }
 
 const CustomTable: React.FC<ICustomTableProps> = ({

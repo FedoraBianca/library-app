@@ -1,4 +1,5 @@
 import { IBook } from "./book";
+import { IOrder } from "./order";
 
 export enum PageFlashMessageType {
     PRIMARY = 'primary',
@@ -35,9 +36,9 @@ export interface IBorrowModalInput {
     book: IBook;
 }
 
-// TODO: Check if there is the need fpr different types
 export interface IReturnModalInput {
-    book: IBook;
+    order: IOrder;
+    penalty: number;
 }
 
 export type ModalInput = IBorrowModalInput | IReturnModalInput;

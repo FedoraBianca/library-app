@@ -131,6 +131,18 @@ export const ApiCall = (requestParams: IApiCallParams) => {
             error: undefined
           }
         }
+      case 'return-book': {
+        mockActiveOrders = mockActiveOrders.filter(order => order.ISBN !== data.ISBN);
+        mockBookList = mockBookList.map(book =>
+          book.ISBN === data.ISBN
+            ? { ...book, availableItems: book.availableItems ? book.availableItems + 1 : 0 }
+            : book
+          );
+        return {
+          success: true,
+          error: undefined
+        }
+      }
       case 'borrowed-books': {
         return {
           data: mockActiveOrders,

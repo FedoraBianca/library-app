@@ -84,7 +84,7 @@ const DashboardPage = () => {
         loading && <p>Loading...</p>
       }
       {!loading && !error && tableData &&
-        <CustomTable tableData={tableData} tableHeader={headerData} action={() => handleBorrow} />
+        <CustomTable tableData={tableData} tableHeader={headerData} />
       }
     </>
   );

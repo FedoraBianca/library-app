@@ -2,9 +2,9 @@ import { all, put, takeLatest } from "redux-saga/effects";
 import { IBook } from "../../interfaces/book";
 import { IOrder } from "../../interfaces/order";
 import { PageFlashMessageType } from "../../interfaces/page";
-import { borrowBookFail, borrowBookSuccess, createBookFail, createBookSuccess, getActiveOrdersFail, getActiveOrdersSuccess, getBookListFail, getBookListStart, getBookListSuccess } from "../../redux/actions/bookActions";
+import { borrowBookFail, borrowBookSuccess, createBookFail, createBookSuccess, getActiveOrdersFail, getActiveOrdersStart, getActiveOrdersSuccess, getBookListFail, getBookListStart, getBookListSuccess, returnBookSuccess } from "../../redux/actions/bookActions";
 import { setPageFlashMessage } from "../../redux/actions/pageActions";
-import { BookActionsTypes, IBorrowBookStartAction, ICreateBookStartAction, IGetActiveOrdersStartAction } from "../../redux/actionTypes/bookActionsTypes";
+import { BookActionsTypes, IBorrowBookStartAction, ICreateBookStartAction, IReturnBookStartAction } from "../../redux/actionTypes/bookActionsTypes";
 import { ApiCall, IApiCallParams } from "../api";
 
 export function* getBookList() {
@@ -73,6 +73,32 @@ export function* borrowBook(action: IBorrowBookStartAction) {
     }
 }
 
+export function* returnBook(action: IReturnBookStartAction) {
+  const { data } = action.payload;
+
+  const requestParams = {
+      route: 'some-route-here/return-book',
+      data,
+      type: 'post',
+  };
+
+  const response = ApiCall(requestParams as IApiCallParams);
+
+  if  (response.success) {
+      yield put(returnBookSuccess());
+      yield put(getActiveOrdersStart());
+      yield put(setPageFlashMessage({
+          flashMessage: {
+            type: PageFlashMessageType.SUCCESS,
+            message: 'Your successfully returned´ the book !'
+          }
+        }));
+  }
+  else {
+      yield put(borrowBookFail({ error: response.error || 'Something went wrong!'}))
+  }
+}
+
 export function* getActiveOrders() {
     const requestParams = {
         route: 'some-route-here/borrowed-books',
@@ -93,6 +119,7 @@ export function* booksSaga() {
         takeLatest(BookActionsTypes.GET_BOOK_LIST_START, getBookList),
         takeLatest(BookActionsTypes.CREATE_BOOK_START, createBook),
         takeLatest(BookActionsTypes.BORROW_BOOK_START, borrowBook),
+        takeLatest(BookActionsTypes.RETURN_BOOK_START, returnBook),
         takeLatest(BookActionsTypes.GET_ACTIVE_ORDERS_START, getActiveOrders)
     ]);
 }

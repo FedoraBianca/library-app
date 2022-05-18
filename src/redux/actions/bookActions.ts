@@ -4,7 +4,8 @@ import {
     ICreateBookStartPayload, 
     IFailPayload, 
     IGetActiveOrdersSuccessPayload, 
-    IGetBookListSuccessPayload 
+    IGetBookListSuccessPayload, 
+    IReturnBookStartPayload
 } from "../actionTypes/bookActionsTypes";
 
 export const getBookListStart = () => ({
@@ -47,6 +48,20 @@ export const borrowBookSuccess = () => ({
 export const borrowBookFail = (payload: IFailPayload) => ({
     type: BookActionsTypes.BORROW_BOOK_FAIL,
     payload
+});
+
+export const returnBookStart = (payload: IReturnBookStartPayload) => ({
+  type: BookActionsTypes.RETURN_BOOK_START,
+  payload
+});
+
+export const returnBookSuccess = () => ({
+  type: BookActionsTypes.RETURN_BOOK_SUCCESS
+});
+
+export const returnBookFail = (payload: IFailPayload) => ({
+  type: BookActionsTypes.RETURN_BOOK_FAIL,
+  payload
 });
 
 export const getActiveOrdersStart = () => ({

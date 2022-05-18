@@ -6,6 +6,7 @@ const books = (state = initialState.books, action: BookActions) => {
         case BookActionsTypes.GET_BOOK_LIST_START:
         case BookActionsTypes.CREATE_BOOK_START:
         case BookActionsTypes.BORROW_BOOK_START:
+        case BookActionsTypes.RETURN_BOOK_START:
         case BookActionsTypes.GET_ACTIVE_ORDERS_START:
             return {
                 ...state,
@@ -26,6 +27,7 @@ const books = (state = initialState.books, action: BookActions) => {
             }
         case BookActionsTypes.CREATE_BOOK_SUCCESS:
         case BookActionsTypes.BORROW_BOOK_SUCCESS:
+        case BookActionsTypes.RETURN_BOOK_SUCCESS:
             return {
                 ...state,
                 loading: false,
@@ -34,6 +36,7 @@ const books = (state = initialState.books, action: BookActions) => {
         case BookActionsTypes.CREATE_BOOK_FAIL:
         case BookActionsTypes.GET_BOOK_LIST_FAIL:
         case BookActionsTypes.BORROW_BOOK_FAIL:
+        case BookActionsTypes.RETURN_BOOK_FAIL:
         case BookActionsTypes.GET_ACTIVE_ORDERS_FAIL:
             return {
                 ...state,

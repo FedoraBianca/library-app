@@ -11,6 +11,9 @@ export enum BookActionsTypes {
     BORROW_BOOK_START = 'BORROW_BOOK_START',
     BORROW_BOOK_SUCCESS = 'BORROW_BOOK_SUCCESS',
     BORROW_BOOK_FAIL = 'BORROW_BOOK_FAIL',
+    RETURN_BOOK_START = 'RETURN_BOOK_START',
+    RETURN_BOOK_SUCCESS = 'RETURN_BOOK_SUCCESS',
+    RETURN_BOOK_FAIL = 'RETURN_BOOK_FAIL',
     GET_ACTIVE_ORDERS_START = 'GET_ACTIVE_ORDERS_START',
     GET_ACTIVE_ORDERS_SUCCESS = 'GET_ACTIVE_ORDERS_SUCCESS',
     GET_ACTIVE_ORDERS_FAIL = 'GET_ACTIVE_ORDER_FAIL'
@@ -74,6 +77,24 @@ export interface IBorrowBookFailAction {
     payload: IFailPayload;
 }
 
+export interface IReturnBookStartPayload {
+  data: IOrder;
+}
+
+export interface IReturnBookStartAction {
+  type: BookActionsTypes.RETURN_BOOK_START;
+  payload: IReturnBookStartPayload;
+}
+
+export interface IReturnBookSuccessAction {
+  type: BookActionsTypes.RETURN_BOOK_SUCCESS;
+}
+
+export interface IReturnBookFailAction {
+  type: BookActionsTypes.RETURN_BOOK_FAIL;
+  payload: IFailPayload;
+}
+
 export interface IGetActiveOrdersStartAction {
     type: BookActionsTypes.GET_ACTIVE_ORDERS_START;
 }
@@ -101,6 +122,9 @@ export type BookActions = IGetBookListStartAction
 | IBorrowBookStartAction
 | IBorrowBookSuccessAction
 | IBorrowBookFailAction
+| IReturnBookStartAction
+| IReturnBookSuccessAction
+| IReturnBookFailAction
 | IGetActiveOrdersStartAction
 | IGetActiveOrdersSuccessAction
 | IGetActiveOrdersFailAction;

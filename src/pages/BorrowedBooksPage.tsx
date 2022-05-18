@@ -6,13 +6,15 @@ import { useHistory } from "react-router-dom";
 import FlashMessage from "../components/FlashMessage";
 import { IState } from "../interfaces/state";
 import { Alert } from "reactstrap";
-import { clearPageFlashMessage } from "../redux/actions/pageActions";
+import { clearPageFlashMessage, toggleModal } from "../redux/actions/pageActions";
 import CustomTable from "../components/CustomTable";
 import { getActiveOrdersStart } from "../redux/actions/bookActions";
 import ActionEnhancer from "../components/TableEnhancers/ActionEnhancer";
 import { calculatePenalty } from "../utils/helpers";
 import CustomButton from "../components/CustomButton";
 import { PrivateRouteList } from "../routes/routes";
+import { AppModals } from "../interfaces/page";
+import { IOrder } from "../interfaces/order";
 
 const BorrowedBooksPage = () => {
   const dispatch = useDispatch();
@@ -33,7 +35,7 @@ const BorrowedBooksPage = () => {
         title: item.bookTitle,
         borrowedDate: moment.utc(item.dateCreated).format('DD-MM-YYYY'),
         dueDate: moment.utc(item.dateCreated).add(2, 'weeks').format('DD-MM-YYYY'),
-        penalty: calculatePenalty(moment.utc(item.dateCreated).add(2, 'weeks').format(), item.borrowPrice),
+        penalty: `${calculatePenalty(moment.utc(item.dateCreated).add(2, 'weeks').format(), item.borrowPrice)} $`,
         action: { enhancer: <ActionEnhancer item={item} action={handleReturn} actionName='Return Book' /> }
       };
 
@@ -43,7 +45,9 @@ const BorrowedBooksPage = () => {
     setTableData(data);
   }, [activeOrders]);
 
-  const handleReturn = () => {
+  const handleReturn = (order: IOrder) => {
+    let penalty = calculatePenalty(moment.utc(order.dateCreated).add(2, 'weeks').format(), order.borrowPrice);
+    dispatch(toggleModal({ active: AppModals.RETURN_MODAL, input: { order, penalty} }));
   };
 
   const handleClearFlashMessage = () => {
@@ -75,7 +79,7 @@ const BorrowedBooksPage = () => {
       <CustomButton onClick={handleViewAllBooks} variant='success' className='mb-3'>View all books</CustomButton>
 
       {!loading && !error && tableData &&
-        <CustomTable tableData={tableData} tableHeader={headerData} action={handleReturn} />
+        <CustomTable tableData={tableData} tableHeader={headerData} />
       }
     </>
   );
